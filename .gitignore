@@ -1,0 +1,10 @@
+.claude
+*.csv
+catboost_info/
+results/
+models/
+*.pth
+*.png
+*.txt
+*.pkl
+*.xlsx
