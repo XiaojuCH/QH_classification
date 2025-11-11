@@ -42,11 +42,11 @@ print(f"最大类样本数: {max_count}")
 print(f"最小类样本数: {min_count}")
 
 if imbalance_ratio > 50:
-    print("⚠️  严重不平衡！小类别很难学习")
+    print("[WARNING] 严重不平衡！小类别很难学习")
 elif imbalance_ratio > 10:
-    print("⚠️  中度不平衡，需要特殊处理")
+    print("[WARNING] 中度不平衡，需要特殊处理")
 else:
-    print("✓  不平衡程度可接受")
+    print("[OK] 不平衡程度可接受")
 
 # 3. 特征质量分析
 print("\n" + "="*60)
@@ -67,7 +67,7 @@ print(f"  最大方差: {np.max(feature_vars):.4f}")
 print(f"  低方差特征数(<0.1): {low_var_features}/20")
 
 if low_var_features > 5:
-    print("⚠️  存在较多低方差特征，可能包含噪声或冗余信息")
+    print("[WARNING]  存在较多低方差特征，可能包含噪声或冗余信息")
 
 # 特征相关性
 corr_matrix = np.corrcoef(X_scaled.T)
@@ -80,7 +80,7 @@ for i in range(20):
 print(f"\n特征相关性分析:")
 print(f"  高度相关特征对数(>0.9): {high_corr_pairs}")
 if high_corr_pairs > 10:
-    print("⚠️  存在大量冗余特征")
+    print("[WARNING]  存在大量冗余特征")
 
 # 4. 类别可分性分析（最重要！）
 print("\n" + "="*60)
@@ -123,13 +123,13 @@ print(f"\n可分性比率: {separability_ratio:.4f}")
 print(f"  (类间距离/类内距离，越大越好)")
 
 if separability_ratio < 1.5:
-    print("❌ 类别高度重叠！这是准确率低的主要原因")
+    print("[ERROR] 类别高度重叠！这是准确率低的主要原因")
     print("   → 类别之间的距离小于类内的散布")
     print("   → 模型很难区分不同类别")
 elif separability_ratio < 3:
-    print("⚠️  类别有一定重叠，分类难度较大")
+    print("[WARNING]  类别有一定重叠，分类难度较大")
 else:
-    print("✓  类别可分性良好")
+    print("[OK]  类别可分性良好")
 
 # 4.2 Silhouette Score（轮廓系数）
 # 采样以加速计算
@@ -143,11 +143,11 @@ print(f"\nSilhouette Score: {silhouette:.4f}")
 print(f"  (范围[-1, 1]，越接近1越好)")
 
 if silhouette < 0.2:
-    print("❌ 类别严重重叠")
+    print("[ERROR] 类别严重重叠")
 elif silhouette < 0.4:
-    print("⚠️  类别有明显重叠")
+    print("[WARNING]  类别有明显重叠")
 else:
-    print("✓  类别分离较好")
+    print("[OK]  类别分离较好")
 
 # 5. 特征区分度分析
 print("\n" + "="*60)
@@ -192,11 +192,11 @@ good_features = np.sum(fisher_scores > 0.5)
 print(f"  有效特征数(>0.5): {good_features}/20")
 
 if good_features < 5:
-    print("❌ 大部分特征区分度很低")
+    print("[ERROR] 大部分特征区分度很低")
 elif good_features < 10:
-    print("⚠️  只有少数特征有区分度")
+    print("[WARNING]  只有少数特征有区分度")
 else:
-    print("✓  多数特征有较好区分度")
+    print("[OK]  多数特征有较好区分度")
 
 # 6. 可视化
 print("\n" + "="*60)
@@ -315,7 +315,7 @@ ax9.text(0.1, 0.5, summary_text, fontsize=11, verticalalignment='center',
 
 plt.tight_layout()
 plt.savefig('results/data_quality_analysis.png', dpi=300, bbox_inches='tight')
-print("  ✓ 图表已保存: results/data_quality_analysis.png")
+print("  [OK] 图表已保存: results/data_quality_analysis.png")
 
 # 7. 最终诊断
 print("\n" + "="*60)
@@ -325,18 +325,18 @@ print("="*60)
 print("\n准确率上限低的主要原因:")
 issues = []
 if separability_ratio < 1.5:
-    issues.append("1. ❌ 类别高度重叠 - 这是最主要的问题")
+    issues.append("1. [ERROR] 类别高度重叠 - 这是最主要的问题")
     issues.append("   → 不同类别的样本在特征空间中混在一起")
     issues.append("   → 即使是最好的模型也无法区分")
 if imbalance_ratio > 50:
-    issues.append("2. ⚠️  严重的类别不平衡")
+    issues.append("2. [WARNING]  严重的类别不平衡")
     issues.append("   → 小类别样本太少，模型学不到有效模式")
 if good_features < 10:
-    issues.append("3. ⚠️  特征区分度不足")
+    issues.append("3. [WARNING]  特征区分度不足")
     issues.append("   → 现有特征无法有效区分类别")
 
 if not issues:
-    print("✓ 数据质量良好，模型性能可能还有提升空间")
+    print("[OK] 数据质量良好，模型性能可能还有提升空间")
 else:
     for issue in issues:
         print(issue)
